@@ -1,0 +1,28 @@
+{
+    "name": "Useless styles"
+    ,"version": "1.0"
+    ,"description": "This extension search useless styles on the page"
+    ,"icons": { 
+        "16": "icon16.png", 
+        "48": "icon48.png", 
+        "128": "icon128.png"
+    }
+    ,"update_url": "http://www.lamoda.ru/tools/useless_styles/extension/updates.xml"
+    ,"popup": "popup.html"
+    ,"browser_action": {
+        "default_icon": "ico.png",
+        "default_title": "Useless styles"
+    }
+    ,"content_scripts": [
+        {
+            "matches": ["*://*.lamoda.ru/*"],
+            "js": ["jquery.js", "script.js"],
+            "run_at": "document_end"
+        }
+    ]
+    ,"permissions": [
+        "tabs",
+        "http://*/*"
+    ]
+    ,"options_page": "options.html"
+}

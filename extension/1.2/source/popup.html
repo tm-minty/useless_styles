@@ -1,0 +1,70 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+    <style type="text/css">
+        body{width: 300px; font-size: 12px; line-height: 1.2em; font-family: Arial;}
+        h2{font-size: 16px; line-height: 1.2em; color: #333;}
+        #cmsblocks-result{padding: 10px 0; border: solid 1px #CCC; display: none;}
+        #cmsblocks-result div{padding: 2px 10px; cursor: pointer;}
+        #cmsblocks-result div:hover{background: #EEE;}
+        #hide-cms-blocks{display: none;}
+    </style>
+    <script type="text/javascript" src="jquery.js"></script>
+</head>
+<body>
+    <input type="button" value="Показать CMS блоки" id="show-cms-blocks" />
+    <input type="button" value="Спрятать CMS блоки" id="hide-cms-blocks" />
+    <h2 style="display: none;" id="cmsblocks-header">CMS блоки на этой странице</h2>
+    <div id="cmsblocks-result"></div>
+    <script type="text/javascript">
+        chrome.tabs.getSelected( null, function(tab){
+            chrome.tabs.sendRequest(tab.id, {action: 'hasBlocks'}, function(response){
+                if( response ){
+                    $('#cmsblocks-result').empty();
+                    $('#show-cms-blocks').trigger('click');
+                }
+            });
+        });
+        $('#show-cms-blocks').bind('click', function(){
+            $(this).hide();
+            $('#hide-cms-blocks').show();
+            $('#cmsblocks-result').empty();
+            chrome.tabs.getSelected( null, function(tab){
+                chrome.tabs.sendRequest(tab.id, {action: 'showCmsBlocks'}, function(response){
+                    console.log(response);
+                    $('#cmsblocks-header').show();
+                    $('#cmsblocks-result').show();
+                    for( b in response ){
+                        var block = response[b];
+                        var blockDiv = $('<div class="lamoda-cmsblock-name" id="' + block + '">' + block + '</div>');
+                        blockDiv.bind('mouseenter', function(){
+                            var id = $(this).attr('id');
+                            $(this).addClass('active');
+                            chrome.tabs.getSelected( null, function(tab){
+                                chrome.tabs.sendRequest(tab.id, {action: 'activateCmsBlock', id: id}, function(response){});
+                            });
+                        }).bind('mouseleave', function(){
+                            var id = $(this).attr('id');
+                            $(this).removeClass('active');
+                            chrome.tabs.getSelected( null, function(tab){
+                                chrome.tabs.sendRequest(tab.id, {action: 'deactivateCmsBlock', id: id}, function(response){});
+                            });
+                        });
+                        $('#cmsblocks-result').append(blockDiv);
+                    }
+                });
+            });
+        });
+        $('#hide-cms-blocks').bind('click', function(){
+            $(this).hide();
+            $('#show-cms-blocks').show();
+            $('#cmsblocks-result, #cmsblocks-header').hide();
+            chrome.tabs.getSelected( null, function(tab){
+                chrome.tabs.sendRequest(tab.id, {action: 'hideCmsBlocks'}, function(response){});
+            });
+        });
+    </script>
+</body>
+</html>

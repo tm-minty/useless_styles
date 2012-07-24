@@ -1,0 +1,4 @@
+.lamoda-cmsblock-wrapper{position: absolute; border: solid 1px rgba(0, 0, 0, 0.3); z-index: 10000;}
+.lamoda-cmsblock-wrapper:hover, .lamoda-cmsblock-wrapper.active{border: solid 1px rgba(255, 0, 0, 1); z-index: 100000;}
+.lamoda-cmsblock-wrapper .lamoda-cmsblock-name{background: rgba(0, 0, 0, .1); border: solid 1px rgba(0, 0, 0, 0.3); color: #000; z-index: 10000; position: absolute;}
+.lamoda-cmsblock-wrapper:hover .lamoda-cmsblock-name, .lamoda-cmsblock-wrapper.active .lamoda-cmsblock-name{background: rgba(255, 0, 0, 1); border: solid 1px rgba(255, 0, 0, 1);}
